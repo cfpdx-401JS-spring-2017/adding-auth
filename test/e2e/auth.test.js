@@ -32,9 +32,13 @@ describe('Auth User Management', () => {
       badRequest('/auth/signup', { username: 'PomLover57' }, 400, 'Username and password required');
     });
 
-    // it('signup', () => {
+    let token = '';
 
-    // });
+    it('signup', () => {
+      request.post('/auth/signup')
+      .send(user)
+      .then(res => assert.ok(token = res.body.token));
+    });
 
   });
 
