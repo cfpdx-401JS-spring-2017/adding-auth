@@ -25,8 +25,16 @@ describe('Auth User Management', () => {
   describe('Sign Up', () => {
 
     it('requires username', () => {
-      badRequest('/auth/signup', { password: 'hunter2' }, 400, 'username and password required');
+      badRequest('/auth/signup', { password: 'hunter2' }, 400, 'Username and password required');
     });
+
+    it('requires password', () => {
+      badRequest('/auth/signup', { username: 'PomLover57' }, 400, 'Username and password required');
+    });
+
+    // it('signup', () => {
+
+    // });
 
   });
 
