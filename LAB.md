@@ -19,7 +19,18 @@ You'll need to provide:
 
 * Write E2E/API auth tests for signup and signin.
 * Write appropriate model and E2E/API tests for your resource. **You'll need to "sign up" at start of
-test in order to access resource** as this will break tests that previously worked without a token.
+test in order to access resource** as this will break tests that previously worked without a token. Something like:
+
+```js
+    let token = '';    
+    before(() => {
+        return request.post('/api/auth/signup')
+            .send({ email: 'me@me.com', password: 'abc' })
+            .then(res => {
+                token = res.body.token;
+            });
+    });
+```
 
 
 ## Bonus
