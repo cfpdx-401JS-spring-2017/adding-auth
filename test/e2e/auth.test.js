@@ -33,7 +33,7 @@ describe('Auth User Management', () => {
         });
     });
 
-    it('requires username', () => {
+    it.only('requires username', () => {
       return badRequest('/api/auth/signup', { password: 'hunter2' }, 400, 'Username and password required');
     });
 
@@ -46,13 +46,13 @@ describe('Auth User Management', () => {
   describe('Sign In', () => {
 
     it('signin happy path', () => {
-      return request.post('/auth/signin')
+      return request.post('/api/auth/signin')
         .send(user)
         .then(res => assert.ok(res.body.token));
     });
 
     it('token is valid', () => {
-      return request.get('/auth/verify')
+      return request.get('/api/auth/verify')
         .set('Authorization', token)
         .then(res => assert.ok(res.body));
     });
