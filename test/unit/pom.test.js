@@ -16,4 +16,16 @@ describe('Pom Model', () => {
     return ginger.validate();
   });
 
+  it('name is required', () => {
+    const cat = new Pom({});
+
+    return cat.validate()
+    .then(expectedValidation, 
+    err => {
+      const errors = err.errors;
+      assert.ok(errors.name && errors.name.kind === 'required');
+    });
+    
+  });
+
 });
