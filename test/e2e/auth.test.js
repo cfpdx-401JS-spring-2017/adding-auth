@@ -11,16 +11,16 @@ describe('Auth User Management', () => {
     password: 'hunter2'
   };
 
-  const badRequest = (url, data, code, error) => 
-  request.post(url)
-  .send(data)
-  .then(
-    () => { throw new Error('Status should not be OK'); },
-    res => {
-      assert.equal(res.status, code);
-      assert.equal(res.response.body.error, error);
-    }
-  );
+  const badRequest = (url, data, code, error) =>
+    request.post(url)
+      .send(data)
+      .then(
+      () => { throw new Error('Status should not be OK'); },
+      res => {
+        assert.equal(res.status, code);
+        assert.equal(res.response.body.error, error);
+      }
+      );
 
   describe('Sign Up', () => {
 
@@ -36,13 +36,19 @@ describe('Auth User Management', () => {
 
     it('signup', () => {
       request.post('/auth/signup')
-      .send(user)
-      .then(res => assert.ok(token = res.body.token));
+        .send(user)
+        .then(res => assert.ok(token = res.body.token));
     });
 
   });
 
   describe('Sign In', () => {
-    
+
+    it('signin', () => {
+      request.post('/auth/signin')
+        .send(user)
+        .then(res => assert.ok(res.body.token));
+    });
+
   });
 });
