@@ -25,19 +25,18 @@ describe('Auth User Management', () => {
 
   describe('Sign Up', () => {
 
+    it('signup happy path', () => {
+      request.post('/auth/signup')
+        .send(user)
+        .then(res => assert.ok(token = res.body.token));
+    });
+    
     it('requires username', () => {
       badRequest('/auth/signup', { password: 'hunter2' }, 400, 'Username and password required');
     });
 
     it('requires password', () => {
       badRequest('/auth/signup', { username: 'PomLover57' }, 400, 'Username and password required');
-    });
-
-
-    it('signup happy path', () => {
-      request.post('/auth/signup')
-        .send(user)
-        .then(res => assert.ok(token = res.body.token));
     });
 
   });
