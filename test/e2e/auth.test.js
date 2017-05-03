@@ -25,18 +25,18 @@ describe('Auth User Management', () => {
 
   describe('Sign Up', () => {
 
-    it('signup happy path', () => {
-      request.post('/auth/signup')
+    it.only('signup happy path', () => {
+      return request.post('/auth/signup')
         .send(user)
         .then(res => assert.ok(token = res.body.token));
     });
-    
+
     it('requires username', () => {
-      badRequest('/auth/signup', { password: 'hunter2' }, 400, 'Username and password required');
+      return badRequest('/auth/signup', { password: 'hunter2' }, 400, 'Username and password required');
     });
 
     it('requires password', () => {
-      badRequest('/auth/signup', { username: 'PomLover57' }, 400, 'Username and password required');
+      return badRequest('/auth/signup', { username: 'PomLover57' }, 400, 'Username and password required');
     });
 
   });
@@ -44,15 +44,15 @@ describe('Auth User Management', () => {
   describe('Sign In', () => {
 
     it('signin happy path', () => {
-      request.post('/auth/signin')
+      return request.post('/auth/signin')
         .send(user)
         .then(res => assert.ok(res.body.token));
     });
 
     it('token is valid', () => {
-      request.get('/auth/verify')
-      .set('Authorization', token)
-      .then(res => assert.ok(res.body));
+      return request.get('/auth/verify')
+        .set('Authorization', token)
+        .then(res => assert.ok(res.body));
     });
 
   });
