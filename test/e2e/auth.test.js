@@ -51,11 +51,11 @@ describe('Auth User Management', () => {
         .then(res => assert.ok(res.body.token));
     });
 
-    it('token is valid', () => {
-      return request.get('/api/auth/verify')
-        .set('Authorization', token)
-        .then(res => assert.ok(res.body));
-    });
+    // it('token is valid', () => {
+    //   return request.get('/api/auth/verify')
+    //     .set('Authorization', token)
+    //     .then(res => assert.ok(res.body));
+    // });
 
   });
 });
