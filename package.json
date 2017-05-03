@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-   "lint": "eslint .",
+    "lint": "eslint .",
     "pretest": "npm run lint",
     "test": "mocha --recursive",
     "test:watch": "npm run test -- -w",
@@ -33,6 +33,7 @@
     "nodemon": "^1.11.0"
   },
   "dependencies": {
+    "bcrypt": "^1.0.2",
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
     "mongodb": "^2.2.26",
