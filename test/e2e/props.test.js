@@ -46,6 +46,16 @@ describe('prop API', () => {
             });
     });
 
+    it('returns 404 for nonexistent id', () => {
+        const nonId = '589d04a8b6695bbdfd361241';
+        return request.get(`/props/${nonId}`)
+            .then(
+                () => { throw new Error('expected 404'); },
+                res => {
+                    assert.equal(res.status, 404);
+                });
+    });
+
     it('gets all props', () => {
         return saveProp(club)
             .then(saved => club = saved)
