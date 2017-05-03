@@ -19,8 +19,9 @@ describe('Auth User Management', () => {
       res => {
         assert.equal(res.status, code);
         assert.equal(res.response.body.error, error);
-      }
-      );
+      });
+
+  let token = '';
 
   describe('Sign Up', () => {
 
@@ -32,9 +33,8 @@ describe('Auth User Management', () => {
       badRequest('/auth/signup', { username: 'PomLover57' }, 400, 'Username and password required');
     });
 
-    let token = '';
 
-    it('signup', () => {
+    it('signup happy path', () => {
       request.post('/auth/signup')
         .send(user)
         .then(res => assert.ok(token = res.body.token));
@@ -44,10 +44,16 @@ describe('Auth User Management', () => {
 
   describe('Sign In', () => {
 
-    it('signin', () => {
+    it('signin happy path', () => {
       request.post('/auth/signin')
         .send(user)
         .then(res => assert.ok(res.body.token));
+    });
+
+    it('token is valid', () => {
+      request.get('/auth/verify')
+      .set('Authorization', token)
+      .then(res => assert.ok(res.body));
     });
 
   });
