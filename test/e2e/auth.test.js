@@ -33,12 +33,12 @@ describe('Auth User Management', () => {
         });
     });
 
-    it.only('requires username', () => {
-      return badRequest('/api/auth/signup', { password: 'hunter2' }, 400, 'Username and password required');
+    it('requires username', () => {
+      return badRequest('/api/auth/signup', { password: 'hunter2' }, 400, 'Email and password must be entered.');
     });
 
     it('requires password', () => {
-      return badRequest('/api/auth/signup', { username: 'PomLover57' }, 400, 'Username and password required');
+      return badRequest('/api/auth/signup', { username: 'PomLover57' }, 400, 'Email and password must be entered.');
     });
 
   });
