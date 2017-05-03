@@ -50,10 +50,10 @@ describe('prop API', () => {
         const nonId = '589d04a8b6695bbdfd361241';
         return request.get(`/props/${nonId}`)
             .then(
-                () => { throw new Error('expected 404'); },
-                res => {
-                    assert.equal(res.status, 404);
-                });
+            () => { throw new Error('expected 404'); },
+            res => {
+                assert.equal(res.status, 404);
+            });
     });
 
     it('gets all props', () => {
@@ -76,5 +76,13 @@ describe('prop API', () => {
                     hard: club.hard
                 });
             });
+    });
+
+    it('returns correct validation error', () => {
+        return saveProp({})
+            .then(
+            () => { throw new Error('expected failure'); },
+            () => { }
+            );
     });
 });
