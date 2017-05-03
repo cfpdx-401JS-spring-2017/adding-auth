@@ -7,7 +7,7 @@ describe('Auth User Management', () => {
   before(db.drop);
 
   const user = {
-    username: 'PomLover57',
+    email: 'PomLover57@gmail.com',
     password: 'hunter2'
   };
 
@@ -25,18 +25,20 @@ describe('Auth User Management', () => {
 
   describe('Sign Up', () => {
 
-    it.only('signup happy path', () => {
-      return request.post('/auth/signup')
+    it('signup happy path', () => {
+      return request.post('/api/auth/signup')
         .send(user)
-        .then(res => assert.ok(token = res.body.token));
+        .then(res => {
+          assert.ok(token = res.body.token);
+        });
     });
 
     it('requires username', () => {
-      return badRequest('/auth/signup', { password: 'hunter2' }, 400, 'Username and password required');
+      return badRequest('/api/auth/signup', { password: 'hunter2' }, 400, 'Username and password required');
     });
 
     it('requires password', () => {
-      return badRequest('/auth/signup', { username: 'PomLover57' }, 400, 'Username and password required');
+      return badRequest('/api/auth/signup', { username: 'PomLover57' }, 400, 'Username and password required');
     });
 
   });
