@@ -6,8 +6,22 @@ describe('prop API', () => {
 
     before(db.drop);
 
+    const user = {
+        email: 'coolemail@me.com',
+        password: 'yipee'
+    };
+
+    let token = '';
+
+    before(() => {
+        return request.post('/auth/signup')
+            .send(user)
+            .then(res => token = res.body.token);
+    });
+
     it('returns empty array from get all', () => {
         return request.get('/props')
+            .set('Authorization', token)
             .then(res => {
                 const props = res.body;
                 assert.deepEqual(props, []);
@@ -29,6 +43,7 @@ describe('prop API', () => {
     function saveProp(prop) {
         return request
             .post('/props')
+            .set('Authorization', token)
             .send(prop)
             .then(res => res.body);
     }
@@ -39,7 +54,7 @@ describe('prop API', () => {
                 assert.ok(saved._id);
                 poi = saved;
             })
-            .then(() => request.get(`/props/${poi._id}`))
+            .then(() => request.get(`/props/${poi._id}`).set('Authorization', token))
             .then(res => res.body)
             .then(got => {
                 assert.equal(got._id, poi._id);
@@ -49,6 +64,7 @@ describe('prop API', () => {
     it('returns 404 for nonexistent id', () => {
         const nonId = '589d04a8b6695bbdfd361241';
         return request.get(`/props/${nonId}`)
+            .set('Authorization', token)
             .then(
             () => { throw new Error('expected 404'); },
             res => {
@@ -59,7 +75,7 @@ describe('prop API', () => {
     it('gets all props', () => {
         return saveProp(club)
             .then(saved => club = saved)
-            .then(() => request.get('/props'))
+            .then(() => request.get('/props').set('Authorization', token))
             .then(res => res.body)
             .then(props => {
                 assert.equal(props.length, 2);
