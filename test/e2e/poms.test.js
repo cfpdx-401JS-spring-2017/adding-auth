@@ -2,7 +2,7 @@ const db = require('./_db');
 const request = require('./_request');
 const assert = require('chai').assert;
 
-describe.only('Poms API', () => {
+describe('Poms API', () => {
 
   before(db.drop);
 
@@ -36,7 +36,7 @@ describe.only('Poms API', () => {
       .then(res => {
         const fetched = res.body;
 
-        assert.deepEqual(fetched, {});
+        assert.deepEqual(fetched, pom);
       })
       .catch(err => { throw err; });
   });
