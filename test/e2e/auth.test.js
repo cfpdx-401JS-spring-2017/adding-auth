@@ -29,6 +29,8 @@ describe('Auth User Management', () => {
       return request.post('/api/auth/signup')
         .send(user)
         .then(res => {
+          token = res.body.token;
+          console.log(token);
           assert.ok(token = res.body.token);
         });
     });
@@ -51,11 +53,14 @@ describe('Auth User Management', () => {
         .then(res => assert.ok(res.body.token));
     });
 
-    // it('token is valid', () => {
-    //   return request.get('/api/auth/verify')
-    //     .set('Authorization', token)
-    //     .then(res => assert.ok(res.body));
-    // });
+    it('token is valid', () => {
+      return request.get('/api/auth/verify')
+        .set('Authorization', token)
+        .then(res => {
+          console.log(res.body);
+          assert.ok(res.body);
+        });
+    });
 
   });
 });
