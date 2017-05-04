@@ -30,4 +30,23 @@ describe('Ensure auth middleware', () => {
 
     ensureAuth(req, null, next);
   });
+
+  it('Valid Authorization', done => {
+    const payload = { _id: 'PomLover57', roles: [] };
+    tokenService.sign(payload)
+      .then(token => {
+        const req = {
+          get(header) { return header === 'Authorization' ? token : null; }
+        };
+
+        const next = (error) => {
+          assert.isNotOk(error);
+          assert.equal(req.user.id, payload._id);
+          done();
+        };
+
+        ensureAuth(req, null, next);
+      })
+      .catch(done);
+  });
 });
