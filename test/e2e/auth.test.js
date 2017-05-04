@@ -30,7 +30,6 @@ describe('Auth User Management', () => {
         .send(user)
         .then(res => {
           token = res.body.token;
-          console.log(token);
           assert.ok(token = res.body.token);
         });
     });
@@ -57,7 +56,6 @@ describe('Auth User Management', () => {
       return request.get('/api/auth/verify')
         .set('Authorization', token)
         .then(res => {
-          console.log(res.body);
           assert.ok(res.body);
         });
     });
