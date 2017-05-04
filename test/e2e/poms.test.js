@@ -17,7 +17,7 @@ describe('Poms API', () => {
       });
   });
 
-  it('GET/ pom with token', () => {
+  it('GET/:id pom with token', () => {
     let pom = {
       name: 'Brownie',
       color: 'black',
@@ -35,10 +35,37 @@ describe('Poms API', () => {
       })
       .then(res => {
         const fetched = res.body;
-
         assert.deepEqual(fetched, pom);
       })
       .catch(err => { throw err; });
+  });
+
+  it('POST/ pom with token', () => {
+    let pom2 = {
+      name: 'BoBo',
+      color: 'white',
+      weight: 15,
+      bestPom: true
+    };
+
+    return request.post('/api/poms')
+      .send(pom2)
+      .set('Authorization', token)
+      .then(res => {
+        assert.ok(res.body._id, 'saved has id');
+        pom2 = res.body;
+      })
+      .catch(err => { throw err; });
+  });
+
+  it('GET/ list of all poms', () => {
+    return request.get('/api/poms')
+    .set('Authorization', token)
+    .then(res => res.body)
+    .then(poms => {
+      assert.equal(poms.length, 2);
+      assert.include(poms[0].name, 'Brownie');
+    });
   });
 
 });
