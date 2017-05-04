@@ -34,12 +34,12 @@ describe('Auth User Management', () => {
         });
     });
 
-    it('requires username', () => {
+    it('requires email', () => {
       return badRequest('/api/auth/signup', { password: 'hunter2' }, 400, 'Email and password must be entered.');
     });
 
     it('requires password', () => {
-      return badRequest('/api/auth/signup', { username: 'PomLover57' }, 400, 'Email and password must be entered.');
+      return badRequest('/api/auth/signup', { email: 'PomLover57' }, 400, 'Email and password must be entered.');
     });
 
   });
@@ -52,6 +52,18 @@ describe('Auth User Management', () => {
         .then(res => assert.ok(res.body.token));
     });
 
+    it('email already exists', () => {
+      return badRequest('/api/auth/signup', user, 400, 'This email is already in use');
+    });
+
+    it('wrong email', () => {
+      return badRequest('/api/auth/signin', { email: 'Google Docs Hacker', password: user.password }, 401, 'Invalid Login');
+    });
+
+    it('wrong password', () => {
+      return badRequest('/api/auth/signin', { email: user.email, password: 'I want your data' }, 401, 'Invalid Login');
+    });
+
     it('token is valid', () => {
       return request.get('/api/auth/verify')
         .set('Authorization', token)
@@ -61,4 +73,22 @@ describe('Auth User Management', () => {
     });
 
   });
+
+  // describe('Unauthorized', () => {
+
+  //   it('signin happy path', () => {
+  //     return request.post('/api/auth/signin')
+  //       .send(user)
+  //       .then(res => assert.ok(res.body.token));
+  //   });
+
+  //   it('token is valid', () => {
+  //     return request.get('/api/auth/verify')
+  //       .set('Authorization', token)
+  //       .then(res => {
+  //         assert.ok(res.body);
+  //       });
+  //   });
+
+  // });
 });
