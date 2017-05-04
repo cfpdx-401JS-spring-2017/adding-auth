@@ -39,6 +39,10 @@ describe('auth tests', () => {
                 .send(user)
                 .then(res => assert.ok(res.body.token));
         });
+
+        it('can\'t use same username', () => {
+            badRequest('/auth/signin', user, 400, 'username taken');
+        });
     });
 
 });
