@@ -17,4 +17,17 @@ describe('Ensure auth middleware', () => {
     ensureAuth(req, null, next);
 
   });
+
+  it('routes to error handler when token is bad', done => {
+    const req = {
+      get() { return 'this-token-sucks'; }
+    };
+
+    const next = (error) => {
+      assert.deepEqual(error, { code: 401, error: 'Authorization Failed' });
+      done();
+    };
+
+    ensureAuth(req, null, next);
+  });
 });
