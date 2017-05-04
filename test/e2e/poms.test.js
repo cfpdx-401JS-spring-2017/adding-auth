@@ -2,7 +2,7 @@ const db = require('./_db');
 const request = require('./_request');
 const assert = require('chai').assert;
 
-describe('Poms API', () => {
+describe.only('Poms API', () => {
 
   before(db.drop);
 
@@ -27,6 +27,7 @@ describe('Poms API', () => {
 
     return request.post('/api/poms')
       .send(pom)
+      .set('Authorization', token)
       .then(res => {
         pom = res.body;
         return request.get(`/api/poms/${pom._id}`)
