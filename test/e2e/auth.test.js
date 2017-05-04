@@ -86,5 +86,16 @@ describe('Auth User Management', () => {
         });
     });
 
+    it('401 with bad token', () => {
+      return request.get('/api/poms')
+        .set('Authorization', 'faketoken')
+        .then(
+        () => { throw new Error('status should not be 200'); },
+        res => {
+          assert.equal(res.status, 401);
+          assert.equal(res.response.body.error, 'Authorization Failed');
+        });
+    });
+
   });
 });
