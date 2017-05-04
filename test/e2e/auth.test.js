@@ -74,21 +74,17 @@ describe('Auth User Management', () => {
 
   });
 
-  // describe('Unauthorized', () => {
+  describe('Unauthorized', () => {
 
-  //   it('signin happy path', () => {
-  //     return request.post('/api/auth/signin')
-  //       .send(user)
-  //       .then(res => assert.ok(res.body.token));
-  //   });
+    it('401 with no token', () => {
+      return request.get('/api/poms')
+        .then(
+        () => { throw new Error('status should not be 200'); },
+        res => {
+          assert.equal(res.status, 401);
+          assert.equal(res.response.body.error, 'No Authorization Found');
+        });
+    });
 
-  //   it('token is valid', () => {
-  //     return request.get('/api/auth/verify')
-  //       .set('Authorization', token)
-  //       .then(res => {
-  //         assert.ok(res.body);
-  //       });
-  //   });
-
-  // });
+  });
 });
