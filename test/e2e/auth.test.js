@@ -27,49 +27,53 @@ describe('auth tests', () => {
         };
 
         it('signup requires email', () => {
-            badRequest('/auth/signup', { password: 'yipee' }, 400, 'email and password are required');
+            return badRequest('/auth/signup', { password: 'yipee' }, 400, 'email and password required');
         });
 
         it('signup requires password', () => {
-            badRequest('/auth/signup', { email: 'coolemail@me.com' }, 400, 'email and password are required');
+            return badRequest('/auth/signup', { email: 'coolemail@me.com' }, 400, 'email and password required');
         });
 
         it('signup happy path', () => {
             return request
                 .post('/auth/signup')
                 .send(user)
-                .then(res => assert.ok(res.body.token));
+                .then(res => {
+                    token = res.body.token;
+                    console.log(token, 'token');
+                    assert.ok(res.body.token);
+                });
         });
 
         it('can\'t use same email', () => {
-            badRequest('/auth/signup', user, 400, 'email taken');
+            return badRequest('/auth/signup', user, 400, 'email in use');
         });
 
         it('signin requires password', () => {
-            badRequest('/auth/signin', { email: 'yee@yee.com' }, 400, 'email and password are required');
+            return badRequest('/auth/signin', { email: 'yee@yee.com' }, 400, 'email and password required');
         });
 
         it('signin requires email', () => {
-            badRequest('/auth/signin', { password: 'yee' }, 400, 'email and password are required');
+            return badRequest('/auth/signin', { password: 'yee' }, 400, 'email and password required');
         });
 
         it('signin with wrong email', () => {
-            badRequest('/auth/signin', { email: 'notanemail', password: user.password }, 401, 'invalid email or password');
+            return badRequest('/auth/signin', { email: 'notanemail', password: user.password }, 401, 'Invalid login');
         });
 
         it('signin with wrong password', () => {
-            badRequest('/auth/signin', { email: user.email, password: 'nope' }, 401, 'invalid email or password');
+            return badRequest('/auth/signin', { email: user.email, password: 'nope' }, 401, 'Invalid login');
         });
 
         it('signin works', () => {
-            request
-                .post('/auth/verify')
+            return request
+                .post('/auth/signin')
                 .send(user)
                 .then(res => assert.ok(res.body.token));
         });
 
         it('invalid token', () => {
-            request
+            return request
                 .get('/auth/verify')
                 .set('Authorization', 'bad token')
                 .then(
@@ -80,7 +84,7 @@ describe('auth tests', () => {
         });
 
         it('valid token', () => {
-            request
+            return request
                 .get('/auth/verify')
                 .set('Authorization', token)
                 .then(res => assert.ok(res.body));
@@ -93,11 +97,11 @@ describe('auth tests', () => {
             return request
                 .get('/props')
                 .then(
-                    () => { throw new Error('status should not be 200'); },
-                    res => {
-                        assert.equal(res.status, 401);
-                        assert.equal(res.response.body.error, 'no authorization found');
-                    }
+                () => { throw new Error('status should not be 200'); },
+                res => {
+                    assert.equal(res.status, 401);
+                    assert.equal(res.response.body.error, 'no authorization found');
+                }
                 );
         });
 
@@ -106,11 +110,11 @@ describe('auth tests', () => {
                 .get('/props')
                 .set('Authorization', 'notatoken')
                 .then(
-                    () => { throw new Error('status should not be 200'); },
-                    res => {
-                        assert.equal(res.status, 401);
-                        assert.equal(res.response.body.error, 'no authorization found');
-                    }
+                () => { throw new Error('status should not be 200'); },
+                res => {
+                    assert.equal(res.status, 401);
+                    assert.equal(res.response.body.error, 'no authorization found');
+                }
                 );
         });
     });
